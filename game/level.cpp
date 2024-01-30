@@ -54,6 +54,17 @@ void Level::checkCollisions()
 		}
 
 	}
+
+	Player* player = m_state->getPlayer();
+
+	for (auto& obj : m_dynamic_objects) {
+		MiniMushroom* mushroom = dynamic_cast<MiniMushroom*>(obj);
+		if (mushroom && mushroom->isActive() && mushroom->intersect(*m_state->getPlayer())) {
+			if (m_state->getPlayer()->intersectDown(*mushroom)) {
+				mushroom->onCollision(m_state->getPlayer());
+			}
+		}
+	}
 }
 
 void Level::update(float dt)
@@ -62,6 +73,9 @@ void Level::update(float dt)
 		m_state->getPlayer()->update(dt);
 
 	checkCollisions();
+	for (auto& obj : m_dynamic_objects) {
+		obj->update(dt);
+	}
 
 	GameObject::update(dt);
 }
@@ -77,62 +91,49 @@ void Level::init()
 	for(auto p_gob : m_dynamic_objects)
 		if (p_gob) p_gob->init();
 
-	m_blocks.push_back(Box(5* m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(4 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(3 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(2 * m_block_size, 5 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(5* m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(6 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(7 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(7 * m_block_size, 5 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(3 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(4 * m_block_size, 3 * m_block_size, m_block_size, m_block_size));
-	
-	m_blocks.push_back(Box(1 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(8 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(9 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(10 * m_block_size, 5 * m_block_size, m_block_size, m_block_size));
-
-
+	m_blocks.push_back(Box(10 * m_block_size, 5 * m_block_size, m_block_size, m_block_size)); //solinas
 	m_blocks.push_back(Box(10 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(11 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(12 * m_block_size, 7 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(13 * m_block_size, 8 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(14 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(15 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(16 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(16 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(17 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(18 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(19 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(20 * m_block_size, 8 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(21 * m_block_size, 8 * m_block_size, m_block_size, m_block_size));
-
-	m_blocks.push_back(Box(18 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(17 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(12 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(15 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(16 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(17 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(17 * m_block_size, 5 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(18 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(19 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(21 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(23 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(25 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(26 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(27 * m_block_size, 3 * m_block_size, m_block_size, m_block_size)); //solinas
+	m_blocks.push_back(Box(27 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(28 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(29 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(31 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(32 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(33 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(34 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
 
 
 
 
 
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
+
+
+	
 	
 	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("solinas.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
@@ -144,6 +145,10 @@ void Level::init()
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
@@ -157,6 +162,8 @@ void Level::init()
 	m_block_brush_debug.fill_opacity = 0.1f;
 	SETCOLOR(m_block_brush_debug.fill_color, 0.2f, 1.0f, 0.1f);
 	SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
+
+	spawnMiniMushrooms();
 }
 
 void Level::draw()
@@ -169,7 +176,7 @@ void Level::draw()
 	float offset_y = m_state->m_global_offset_y/2.0f + h / 2.0f;
 
 	// Draw to background				// 2.0f * w , 4.0f *w 
-	graphics::drawRect(offset_x, offset_y, 4.0f * w , 2.0f * w, m_brush_background);
+	graphics::drawRect(offset_x, offset_y, 8.0f * w , 2.0f * w, m_brush_background);
 
 	// Ton player giati den einai ola ta levels idia 
 
@@ -205,3 +212,50 @@ Level::~Level()
 	for (auto p_gob : m_dynamic_objects)
 		if (p_gob) delete p_gob;
 }
+
+void Level::spawnMiniMushrooms() {
+	MiniMushroom* miniMushroom = new MiniMushroom("MiniMushroom");
+
+	float tubeX = 9.0f; // X-coordinate of the tube
+	float cubeX = 4.0f;  // X-coordinate of the cube
+	float mushroomX = (tubeX + cubeX) / 2.0f; // Midpoint X-coordinate
+	float mushroomY = 5.0f; // Assuming ground level Y-coordinate
+
+	// Set the position of the Mini Mushroom
+	miniMushroom->setPosition(mushroomX, mushroomY);
+
+	// Set horizontal movement boundaries 
+	miniMushroom->setBoundaries(cubeX, tubeX); 
+
+	miniMushroom->setSpeed(2.0f); // Ensure this is not set to 0
+	miniMushroom->setDirection(1); // or -1, depending on the initial movement direction
+
+	miniMushroom->setImage("goomba.png");
+	miniMushroom->init();
+	m_dynamic_objects.push_back(miniMushroom);
+
+
+	MiniMushroom* sumo = new MiniMushroom("Sumo");
+
+	float tubesX = 31.0f; // X-coordinate of the tube
+	float cubesX = 34.0f;  // X-coordinate of the cube
+	float sumoX = (tubesX + cubesX) / 2.0f; // Midpoint X-coordinate
+	float sumoY = 3.0f; // Assuming ground level Y-coordinate
+
+	// Set the position of the Mini Mushroom
+	sumo->setPosition(sumoX, sumoY);
+
+	// Set horizontal movement boundaries
+	sumo->setBoundaries(cubesX, tubesX); 
+	sumo->setSpeed(2.0f); // Ensure this is not set to 0
+	sumo->setDirection(1); // or -1, depending on the initial movement direction
+
+	sumo->setImage("Sumo.png");
+	sumo->init();
+	m_dynamic_objects.push_back(sumo);
+}
+
+
+
+
+

@@ -56,6 +56,8 @@ void Player::update(float dt)
 
 	m_state->m_global_offset_x = m_state->getCanvasWidth() / 2.0f - m_pos_x;
 	m_state->m_global_offset_y = m_state->getCanvasHeight() / 2.0f - m_pos_y;
+	setDirectionImage();
+
 }
 
 void Player::init()
@@ -81,4 +83,14 @@ void Player::draw()
 {
 	graphics::drawRect(m_state->getCanvasWidth() * 0.5f, m_state->getCanvasHeight() * 0.5f, 1.0f, 1.0f, m_brush_player);
 
+}
+
+void Player::setDirectionImage() {
+	if (m_vx < 0) { // Moving left
+		m_brush_player.texture = m_state->getFullAssetPath("Mini_Mario2.png");
+	}
+	else if (m_vx > 0) { // Moving right
+		m_brush_player.texture = m_state->getFullAssetPath("Mini_Mario.png");
+	}
+	// If m_vx == 0, looking straight
 }

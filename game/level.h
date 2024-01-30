@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include "MiniMushroom.h"
 
 class Level : public GameObject
 {
@@ -24,6 +25,9 @@ class Level : public GameObject
 	void drawBlock(int i);
 
 	void checkCollisions();
+
+	void spawnMiniMushrooms(); // Method to spawn mini mushrooms
+	
 
 public:
 	// Na enimeronei
