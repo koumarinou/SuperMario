@@ -90,6 +90,10 @@ void Level::init()
 	m_blocks.push_back(Box(1 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(8 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(9 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+
+	m_blocks.push_back(Box(10 * m_block_size, 5 * m_block_size, m_block_size, m_block_size));
+
+
 	m_blocks.push_back(Box(10 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(11 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(12 * m_block_size, 7 * m_block_size, m_block_size, m_block_size));
@@ -97,6 +101,7 @@ void Level::init()
 	m_blocks.push_back(Box(14 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(15 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
 
+	m_blocks.push_back(Box(16 * m_block_size, 9 * m_block_size, m_block_size, m_block_size));
 
 	m_blocks.push_back(Box(16 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(17 * m_block_size, 10 * m_block_size, m_block_size, m_block_size));
@@ -107,10 +112,14 @@ void Level::init()
 	m_blocks.push_back(Box(20 * m_block_size, 8 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(21 * m_block_size, 8 * m_block_size, m_block_size, m_block_size));
 
+	m_blocks.push_back(Box(18 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(17 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(16 * m_block_size, 6 * m_block_size, m_block_size, m_block_size));
 
 
 
 
+
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
@@ -122,13 +131,16 @@ void Level::init()
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
+	
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
