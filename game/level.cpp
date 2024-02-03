@@ -246,7 +246,7 @@ void Level::spawnMiniMushrooms() {
 	sumo->setPosition(sumoX, sumoY);
 
 	// Set horizontal movement boundaries
-	sumo->setBoundaries(cubesX, tubesX); 
+	sumo->setBoundaries(tubesX, cubesX);
 	sumo->setSpeed(2.0f); // Ensure this is not set to 0
 	sumo->setDirection(1); // or -1, depending on the initial movement direction
 
