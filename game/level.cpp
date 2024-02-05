@@ -63,6 +63,10 @@ void Level::checkCollisions()
 			if (m_state->getPlayer()->intersectDown(*mushroom)) {
 				mushroom->onCollision(m_state->getPlayer());
 			}
+			if (m_state->getPlayer()->intersectSideways(*mushroom)) {
+				m_state->getPlayer()->markForDeath(); // Mark player for death instead of direct handling
+				break;
+			}
 		}
 	}
 }
@@ -119,43 +123,55 @@ void Level::init()
 	m_blocks.push_back(Box(32 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(33 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(34 * m_block_size, 4 * m_block_size, m_block_size, m_block_size));
-
-
-
-
-
+	m_blocks.push_back(Box(36 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(37 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(38 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(39 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(42 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(43 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(44 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(45 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	
 
 
 	
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("solinas.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("cube1.png");
 	
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("solinas.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("solinas.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("solinas.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
-	m_block_names.push_back("cube1.png");
 
 	m_block_brush.outline_opacity = 0.0f;
 
@@ -210,8 +226,6 @@ void Level::draw()
 	}
 
 	
-
-
 }
 
 Level::Level(const std::string& name)
@@ -267,6 +281,29 @@ void Level::spawnMiniMushrooms() {
 	sumo->setImage("Sumo.png");
 	sumo->init();
 	m_dynamic_objects.push_back(sumo);
+
+
+	MiniMushroom* goomba = new MiniMushroom("goomba");
+
+	float tubesX2 = 36.0f; // X-coordinate of the tube
+	float cubesX2 = 39.0f;  // X-coordinate of the cube
+	float sumoX2 = (tubesX2 + cubesX2) / 2.0f; // Midpoint X-coordinate
+	float sumoY2 = 1.0f; // Assuming ground level Y-coordinate
+
+	// Set the position of the Mini Mushroom
+	goomba->setPosition(sumoX2, sumoY2);
+
+	// Set horizontal movement boundaries
+	goomba->setBoundaries(tubesX2, cubesX2);
+	goomba->setSpeed(2.0f); // Ensure this is not set to 0
+	goomba->setDirection(1); // or -1, depending on the initial movement direction
+
+	goomba->setImage("goomba2.png");
+	goomba->init();
+	m_dynamic_objects.push_back(goomba);
+
+
+
 }
 
 

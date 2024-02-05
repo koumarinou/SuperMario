@@ -43,12 +43,16 @@ void GameState::update(float dt)
 		m_current_level->update(dt);
 	}
 
-	// Implement Mario's death logic
-	float deathYPosition = 7.0f; 
-	if (m_player && m_player->isActive() && m_player->m_pos_y > deathYPosition)
-	{
-		// Handle Mario's death
+	// Implement Mario's death logic due to falling
+	float deathYPosition = 7.0f;
+	if (m_player && m_player->isActive() && m_player->m_pos_y > deathYPosition) {
+		m_player->markForDeath(); // Mark for death due to falling
+	}
+
+	// Check if the player is marked for death and handle it
+	if (m_player && m_player->shouldDie()) {
 		handleMarioDeath();
+		m_player->resetDeathFlag(); // Reset the flag after handling death
 	}
 
 	m_debugging = graphics::getKeyState(graphics::SCANCODE_0);

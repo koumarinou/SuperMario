@@ -15,7 +15,11 @@ class Player :public GameObject ,public Box
 	const float m_accel_horizontal = 40.0f;
 	const float m_max_velocity = 10.0f;
 
+
 	void movePlayer(float dt);
+
+	bool m_shouldDie = false; // Flag to mark the player for death
+
 
 public:
 
@@ -28,6 +32,20 @@ public:
 	void draw() override;
 	void setDirectionImage();
 	void setPosition(float x , float y);
+	// Method to mark the player for death
+	void markForDeath() {
+		m_shouldDie = true;
+	}
+
+	// Method to check if the player is marked for death
+	bool shouldDie() const {
+		return m_shouldDie;
+	}
+
+	// Reset the death flag (for example, when the game is reset)
+	void resetDeathFlag() {
+		m_shouldDie = false;
+	}
 
 protected:
 	void debugDraw();
