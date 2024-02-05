@@ -94,3 +94,8 @@ void Player::setDirectionImage() {
 	}
 	// If m_vx == 0, looking straight
 }
+
+void Player::setPosition(float x, float y) {
+	m_pos_x = x;
+	m_pos_y = y;
+}

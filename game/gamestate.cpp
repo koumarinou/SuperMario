@@ -3,6 +3,7 @@
 #include "player.h"
 #include  <thread>
 #include <chrono>
+#include <iostream>
 
 GameState::GameState()
 {
@@ -30,22 +31,65 @@ void GameState::draw()
 
 void GameState::update(float dt)
 {
-	// Megala diastimata update den ginonte gia poli arges allages 
+
+	// std::cout << "Mario Y: " << m_player->m_pos_y << std::endl;
+	// Ensures updates do not run for excessively long frames
 	if (dt > 500)
 		return;
 
-	float sleep_time = std::max(0.0f, 17.0f - dt);
+	// Update the current level and player
+	if (m_current_level)
+	{
+		m_current_level->update(dt);
+	}
 
-	std::this_thread::sleep_for(std::chrono::duration<float,std::milli>(sleep_time));
-
-
-	if (!m_current_level)
-		return;
-
-	m_current_level->update(dt);
-
+	// Implement Mario's death logic
+	float deathYPosition = 7.0f; 
+	if (m_player && m_player->isActive() && m_player->m_pos_y > deathYPosition)
+	{
+		// Handle Mario's death
+		handleMarioDeath();
+	}
 
 	m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
+}
+
+void GameState::resetGame() {
+	if (m_current_level) {
+		delete m_current_level; // Delete the current level to free up memory
+		m_current_level = new Level(); // Create a new level instance
+		m_current_level->init(); // Initialize the new level
+	}
+
+	if (m_player) {
+		m_player->setPosition(5.0f, 5.0f); // Reset player's position to the start
+		m_player->setActive(true); // Make sure the player is active
+		m_player->init(); // Re-initialize player to reset any state
+	}
+
+
+	// Optionally reset any other state in the game that tracks progress, scores, etc.
+}
+
+void GameState::gameOver() {
+	
+	isGameOver = true;
+}
+
+
+
+void GameState::handleMarioDeath() {
+	m_playerLives--; // Decrement the life count
+
+	if (m_playerLives > 0) {
+		// Reset the game while keeping the lives count updated
+		// std::cout << "Hey";
+		resetGame();
+	}
+	else {
+		// No lives left, show the game over screen
+		gameOver();
+	}
 }
 
 GameState* GameState::getInstance()

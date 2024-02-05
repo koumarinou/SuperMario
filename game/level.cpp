@@ -171,31 +171,45 @@ void Level::draw()
 	float w = m_state->getCanvasWidth();
 	float h = m_state->getCanvasHeight();
 
-	// Sxediazei kentrarismena 
-	float offset_x = m_state->m_global_offset_x/2.0f + w / 2.0f;
-	float offset_y = m_state->m_global_offset_y/2.0f + h / 2.0f;
+	// Update the background texture based on game over state
+	if (m_state->isGameOver) {
+		m_brush_background.texture = m_state->getFullAssetPath("gameover.png");
 
-	// Draw to background				// 2.0f * w , 4.0f *w 
-	graphics::drawRect(offset_x, offset_y, 8.0f * w , 2.0f * w, m_brush_background);
+		// Draw the game over background
+		float offset_x = w / 2.0f;
+		float offset_y = h / 2.0f;
+		graphics::drawRect(offset_x, offset_y, w, h, m_brush_background);
+	}
+	else {
+		m_brush_background.texture = m_state->getFullAssetPath("background3.png");
+		// Sxediazei kentrarismena 
+		float offset_x = m_state->m_global_offset_x / 2.0f + w / 2.0f;
+		float offset_y = m_state->m_global_offset_y / 2.0f + h / 2.0f;
 
-	// Ton player giati den einai ola ta levels idia 
+		// Draw to background				// 2.0f * w , 4.0f *w 
+		graphics::drawRect(offset_x, offset_y, 8.0f * w, 2.0f * w, m_brush_background);
 
-	// Alla stoixeia piso apo ton paixti 
-	for (int i = 0; i < m_blocks.size(); i++)
-	{
-		drawBlock(i);
+		// Ton player giati den einai ola ta levels idia 
+
+		// Alla stoixeia piso apo ton paixti 
+		for (int i = 0; i < m_blocks.size(); i++)
+		{
+			drawBlock(i);
+		}
+
+		if (m_state->getPlayer()->isActive())
+			m_state->getPlayer()->draw();
+
+		// Alla stoixeia brosta apo ton paixti 
+
+		for (auto p_gob : m_static_objects)
+			if (p_gob) p_gob->draw();
+
+		for (auto p_gob : m_dynamic_objects)
+			if (p_gob) p_gob->draw();
 	}
 
-	if (m_state->getPlayer()->isActive())
-		m_state->getPlayer()->draw();
-
-	// Alla stoixeia brosta apo ton paixti 
-
-	for (auto p_gob : m_static_objects)
-		if (p_gob) p_gob->draw();
-
-	for (auto p_gob : m_dynamic_objects)
-		if (p_gob) p_gob->draw();
+	
 
 
 }

@@ -27,6 +27,7 @@ public:
 	void init() override;
 	void draw() override;
 	void setDirectionImage();
+	void setPosition(float x , float y);
 
 protected:
 	void debugDraw();

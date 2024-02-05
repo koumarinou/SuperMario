@@ -8,6 +8,7 @@ private:
 	std::string m_asset_path = "assets\\";
 	float m_canvas_width = 6.f;
 	float m_canvas_height = 6.f;
+	
 
 
 	static GameState* m_unique_instance;
@@ -16,17 +17,24 @@ private:
 
 	class Player* m_player = 0;
 	class Level* m_current_level = 0;
+	int m_playerLives = 3; // Mario starts with 3 lives
+	
 
 
 public:
 	float m_global_offset_x = 0.0f;
 	float m_global_offset_y = 0.0f;
 
+	bool isGameOver = false; // Flag to indicate game over state
+
 	bool m_debugging = false;
 
 	void init();
 	void draw();
 	void update(float dt);
+	void handleMarioDeath();
+	void resetGame();
+	void gameOver();
 
 
 	static GameState* getInstance();
