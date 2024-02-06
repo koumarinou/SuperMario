@@ -129,7 +129,8 @@ void Level::init()
 	m_blocks.push_back(Box(39 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(42 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(43 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(44 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
+	m_blocks.push_back(Box(44 * m_block_size, 1 * m_block_size, m_block_size, m_block_size)); // edo tha einai i simea
+	m_blocks.push_back(Box(44 * m_block_size, 2 * m_block_size, m_block_size, m_block_size)); 
 	m_blocks.push_back(Box(45 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	
 
@@ -169,6 +170,7 @@ void Level::init()
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
+	m_block_names.push_back("flag.png");
 	m_block_names.push_back("cube1.png");
 	m_block_names.push_back("cube1.png");
 	

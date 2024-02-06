@@ -47,6 +47,8 @@ public:
 		m_shouldDie = false;
 	}
 
+	float getPositionX() const { return m_pos_x; }
+
 protected:
 	void debugDraw();
 	

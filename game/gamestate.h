@@ -26,7 +26,7 @@ public:
 	float m_global_offset_y = 0.0f;
 
 	bool isGameOver = false; // Flag to indicate game over state
-
+	bool isGameWon = false; // Flag to indicate game win state
 	bool m_debugging = false;
 
 	void init();
@@ -35,6 +35,9 @@ public:
 	void handleMarioDeath();
 	void resetGame();
 	void gameOver();
+	void checkWinCondition(); // Method to check if Mario has won the game
+	void displayWinMessage(); // Method to display the win message
+
 
 
 	static GameState* getInstance();
