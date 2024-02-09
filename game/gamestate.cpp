@@ -31,7 +31,7 @@ void GameState::draw()
 
 void GameState::checkWinCondition()
 {
-	if (m_player && m_player->getPositionX() > 43.0f) {
+	if (m_player && m_player->getPositionX() > 44.0f) {
 		isGameWon = true;
 	}
 }
@@ -66,31 +66,7 @@ void GameState::update(float dt)
 	m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
 
 	checkWinCondition();
-	if (isGameWon) {
-		std::cout << "Mario X: " << m_player->getPositionX() << std::endl; // Use getPositionX() to access Mario's X position
-
-		// Example values, adjust according to your flag's actual position
-		float flagX = 44.0f; // X-coordinate of the flag
-		float flagTopY = 2.0f; // Y-coordinate for the top of the flag in game world units
-
-		// Convert game world position to canvas position
-		float canvasFlagX = flagX + m_global_offset_x;
-		float canvasFlagTopY = flagTopY + m_global_offset_y;
-
-		// Calculate position for the "WINS" message to appear above the flag
-		float messageX = canvasFlagX; // Align with flag's center
-		float messageY = canvasFlagTopY - 1.0f; // Adjust this value to position above the flag as needed
-
-		graphics::Brush br;
-		br.fill_color[0] = 1.0f; // Color settings
-		br.fill_color[1] = 0.5f;
-		br.fill_color[2] = 0.0f;
-		br.fill_opacity = 1.0f;
-
-		// Ensure the font size and positioning are appropriate
-		graphics::drawText(messageX - 50, messageY, 30, "WINS!", br);
-		return;
-	}
+	
 }
 
 

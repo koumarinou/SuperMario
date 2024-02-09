@@ -21,6 +21,7 @@ class Level : public GameObject
 	std::vector<std::string> m_block_names;
 	graphics::Brush m_block_brush;
 	graphics::Brush m_block_brush_debug;
+	
 
 	void drawBlock(int i);
 
@@ -38,4 +39,6 @@ public:
 	void draw() override;
 	Level(const std::string& name= "Level0");
 	~Level() override ;
+	void spawnCoins();
+	
 };

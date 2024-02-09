@@ -2,6 +2,8 @@
 #include "gamestate.h"
 #include "player.h"
 #include "util.h"
+#include "Coin.h"
+
 
 
 // Gia ta cubes
@@ -69,6 +71,78 @@ void Level::checkCollisions()
 			}
 		}
 	}
+
+	for (auto& obj : m_dynamic_objects) {
+		Coin* coin = dynamic_cast<Coin*>(obj);
+		if (coin && coin->isActive() && coin->intersect(*m_state->getPlayer())) {
+			if (m_state->getPlayer()->intersect(*coin)) {
+				coin->onCollision(m_state->getPlayer());
+			}
+		}
+	}
+}
+
+void Level::spawnCoins() {
+	Coin* coin1 = new Coin("Coin1");
+	coin1->setPosition(6.0f, 4.0f); // Example position
+	coin1->setImage("coin.png"); // Specify the image for the coin
+	coin1->init();
+	m_dynamic_objects.push_back(coin1);
+
+	Coin* coin2 = new Coin("Coin2");
+	coin2->setPosition(7.0f, 4.0f); // Example position
+	coin2->setImage("coin.png"); // Specify the image for the coin
+	coin2->init();
+	m_dynamic_objects.push_back(coin2);
+
+	Coin* coin3 = new Coin("Coin3");
+	coin3->setPosition(8.0f, 4.0f); // Example position
+	coin3->setImage("coin.png"); // Specify the image for the coin
+	coin3->init();
+	m_dynamic_objects.push_back(coin3);
+
+	Coin* coin4 = new Coin("Coin4");
+	coin4->setPosition(9.0f, 4.0f); // Example position
+	coin4->setImage("coin.png"); // Specify the image for the coin
+	coin4->init();
+	m_dynamic_objects.push_back(coin4);
+
+	Coin* coin5 = new Coin("Coin5");
+	coin5->setPosition(19.0f, 4.0f); // Example position
+	coin5->setImage("coin.png"); // Specify the image for the coin
+	coin5->init();
+	m_dynamic_objects.push_back(coin5);
+
+	Coin* coin10 = new Coin("Coin10");
+	coin10->setPosition(20.0f, 3.0f); // Example position
+	coin10->setImage("coin.png"); // Specify the image for the coin
+	coin10->init();
+	m_dynamic_objects.push_back(coin10);
+
+	Coin* coin6 = new Coin("Coin6");
+	coin6->setPosition(21.0f, 2.0f); // Example position
+	coin6->setImage("coin.png"); // Specify the image for the coin
+	coin6->init();
+	m_dynamic_objects.push_back(coin6);
+
+	Coin* coin7 = new Coin("Coin7");
+	coin7->setPosition(22.0f, 1.0f); // Example position
+	coin7->setImage("coin.png"); // Specify the image for the coin
+	coin7->init();
+	m_dynamic_objects.push_back(coin7);
+
+	Coin* coin8 = new Coin("Coin8");
+	coin8->setPosition(34.0f, 2.0f); // Example position
+	coin8->setImage("coin.png"); // Specify the image for the coin
+	coin8->init();
+	m_dynamic_objects.push_back(coin8);
+
+	Coin* coin9 = new Coin("Coin9");
+	coin9->setPosition(35.0f, 1.0f); // Example position
+	coin9->setImage("coin.png"); // Specify the image for the coin
+	coin9->init();
+	m_dynamic_objects.push_back(coin9);
+
 }
 
 void Level::update(float dt)
@@ -80,6 +154,8 @@ void Level::update(float dt)
 	for (auto& obj : m_dynamic_objects) {
 		obj->update(dt);
 	}
+
+
 
 	GameObject::update(dt);
 }
@@ -182,7 +258,12 @@ void Level::init()
 	SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
 
 	spawnMiniMushrooms();
+	spawnCoins();
+	
 }
+
+
+
 
 void Level::draw()
 {
@@ -192,6 +273,14 @@ void Level::draw()
 	// Update the background texture based on game over state
 	if (m_state->isGameOver) {
 		m_brush_background.texture = m_state->getFullAssetPath("gameover.png");
+
+		// Draw the game over background
+		float offset_x = w / 2.0f;
+		float offset_y = h / 2.0f;
+		graphics::drawRect(offset_x, offset_y, w, h, m_brush_background);
+	}
+	else if (m_state->isGameWon) {
+		m_brush_background.texture = m_state->getFullAssetPath("win.png");
 
 		// Draw the game over background
 		float offset_x = w / 2.0f;
@@ -225,7 +314,10 @@ void Level::draw()
 
 		for (auto p_gob : m_dynamic_objects)
 			if (p_gob) p_gob->draw();
+
+		
 	}
+	
 
 	
 }
@@ -241,6 +333,8 @@ Level::~Level()
 
 	for (auto p_gob : m_dynamic_objects)
 		if (p_gob) delete p_gob;
+
+	
 }
 
 void Level::spawnMiniMushrooms() {
