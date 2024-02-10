@@ -1,17 +1,30 @@
 #include "MiniMushroom.h"
+#include <iostream>
 
-MiniMushroom::MiniMushroom(const std::string& name) : GameObject(name) {
-   // m_brush.texture = m_state->getFullAssetPath("goomba.png");
+MiniMushroom::MiniMushroom(const std::string& name, std::string type)
+    : GameObject(name), m_type(type) {
     m_brush.fill_opacity = 1.0f;
     m_brush.outline_opacity = 0.0f;
-    m_width = 1.0f; // Set the size of the mushroom
-    m_height = 1.0f;
+
+    if (m_type == "coin") {
+        m_width = 0.5f; 
+        m_height = 0.5f;
+       
+    }
+    else {
+        m_width = 1.0f;
+        m_height = 1.0f;
+        m_speed = 1.0f; 
+        m_direction = 1; 
+    }
 }
 
-void MiniMushroom::update(float dt) {
-    if (!isActive()) return;
 
-    float delta_time = dt / 1000.0f; // Convert to seconds
+void MiniMushroom::update(float dt) {
+    if (!isActive() || m_type == "coin") return; // Skip update logic for coins
+    if (!isActive()) return;
+    // Convert to seconds
+    float delta_time = dt / 1000.0f; 
 
     m_pos_x += m_direction * m_speed * delta_time;
 
@@ -27,11 +40,16 @@ void MiniMushroom::update(float dt) {
 
 void MiniMushroom::draw() {
     if (!isActive()) return;
-    graphics::drawRect(m_pos_x + m_state->m_global_offset_x, m_pos_y + m_state->m_global_offset_y, m_width, m_height, m_brush);
+        graphics::drawRect(m_pos_x + m_state->m_global_offset_x, m_pos_y + m_state->m_global_offset_y, m_width, m_height, m_brush);
+
+    
 }
 
+
+
 void MiniMushroom::onCollision(Player* player) {
-    setActive(false); // Deactivate the mushroom when Mario lands on it
+    // Deactivate the enemies when Mario lands on it
+    setActive(false); 
 }
 
 void MiniMushroom::setBoundaries(float left, float right) {
@@ -47,6 +65,7 @@ void MiniMushroom::setSpeed(float speed) {
 void MiniMushroom::setPosition(float x, float y) {
     m_pos_x = x;
     m_pos_y = y;
+    
 }
 
 void MiniMushroom::setDirection(int direction) {
@@ -54,6 +73,6 @@ void MiniMushroom::setDirection(int direction) {
 }
 
 void MiniMushroom::setImage(const std::string& image_name) {
-    // Use GameState's getFullAssetPath method to get the complete path
+    // Set the image
     m_brush.texture = m_state->getFullAssetPath(image_name);
 }

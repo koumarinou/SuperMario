@@ -17,7 +17,8 @@ private:
 
 	class Player* m_player = 0;
 	class Level* m_current_level = 0;
-	int m_playerLives = 3; // Mario starts with 3 lives
+	// Mario starts with 3 lives
+	int m_playerLives = 3;
 	
 
 
@@ -25,8 +26,10 @@ public:
 	float m_global_offset_x = 0.0f;
 	float m_global_offset_y = 0.0f;
 
-	bool isGameOver = false; // Flag to indicate game over state
-	bool isGameWon = false; // Flag to indicate game win state
+	// Flag to indicate game over state
+	bool isGameOver = false;
+	// Flag to indicate game win state
+	bool isGameWon = false; 
 	bool m_debugging = false;
 
 	void init();
@@ -35,8 +38,10 @@ public:
 	void handleMarioDeath();
 	void resetGame();
 	void gameOver();
-	void checkWinCondition(); // Method to check if Mario has won the game
-	void displayWinMessage(); // Method to display the win message
+	// Method to check if Mario has won the game
+	void checkWinCondition();
+	// Method to display the win message
+	void displayWinMessage(); 
 
 
 

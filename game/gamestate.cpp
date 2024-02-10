@@ -54,13 +54,15 @@ void GameState::update(float dt)
 	// Implement Mario's death logic due to falling
 	float deathYPosition = 7.0f;
 	if (m_player && m_player->isActive() && m_player->m_pos_y > deathYPosition) {
-		m_player->markForDeath(); // Mark for death due to falling
+		// Mark for death due to falling
+		m_player->markForDeath(); 
 	}
 
 	// Check if the player is marked for death and handle it
 	if (m_player && m_player->shouldDie()) {
 		handleMarioDeath();
-		m_player->resetDeathFlag(); // Reset the flag after handling death
+		// Reset the flag after handling death
+		m_player->resetDeathFlag(); 
 	}
 
 	m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
@@ -74,19 +76,25 @@ void GameState::update(float dt)
 
 void GameState::resetGame() {
 	if (m_current_level) {
-		delete m_current_level; // Delete the current level to free up memory
-		m_current_level = new Level(); // Create a new level instance
-		m_current_level->init(); // Initialize the new level
+		// Delete the current level to free up memory
+		delete m_current_level; 
+		// Create a new level instance
+		m_current_level = new Level(); 
+		// Initialize the new level
+		m_current_level->init(); 
 	}
 
 	if (m_player) {
-		m_player->setPosition(5.0f, 5.0f); // Reset player's position to the start
-		m_player->setActive(true); // Make sure the player is active
-		m_player->init(); // Re-initialize player to reset any state
+		// Reset player's position to the start
+		m_player->setPosition(5.0f, 5.0f); 
+		// Make sure the player is active
+		m_player->setActive(true); 
+		// Re-initialize player to reset any state
+		m_player->init(); 
 	}
 
 
-	// Optionally reset any other state in the game that tracks progress, scores, etc.
+	
 }
 
 void GameState::gameOver() {
@@ -97,11 +105,12 @@ void GameState::gameOver() {
 
 
 void GameState::handleMarioDeath() {
-	m_playerLives--; // Decrement the life count
+	// Decrement the life count
+	m_playerLives--; 
 
 	if (m_playerLives > 0) {
 		// Reset the game while keeping the lives count updated
-		// std::cout << "Hey";
+		// std::cout << "Reset";
 		resetGame();
 	}
 	else {

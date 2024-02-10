@@ -27,7 +27,8 @@ class Level : public GameObject
 
 	void checkCollisions();
 
-	void spawnMiniMushrooms(); // Method to spawn mini mushrooms
+	// Method to spawn mini mushrooms
+	void spawnMiniMushrooms(); 
 	
 
 public:

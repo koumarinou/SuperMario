@@ -17,8 +17,8 @@ class Player :public GameObject ,public Box
 
 
 	void movePlayer(float dt);
-
-	bool m_shouldDie = false; // Flag to mark the player for death
+	// Flag to mark the player for death
+	bool m_shouldDie = false; 
 
 
 public:

@@ -2,7 +2,8 @@
 #include "gamestate.h"
 #include "player.h"
 #include "util.h"
-#include "Coin.h"
+#include <iostream>
+
 
 
 
@@ -22,13 +23,6 @@ void Level::drawBlock(int i)
 
 void Level::checkCollisions()
 {
-	//Auto reference gia na paroume piso reference
-	//for (auto& box : m_blocks)
-	//{
-	//	if (m_state->getPlayer()->intersect(box))
-	//		printf("*");
-	//}
-
 
 	// Na epanaferei tin thesi tou player gia ta cubes 
 	for (auto& box : m_blocks)
@@ -50,6 +44,10 @@ void Level::checkCollisions()
 		if (offset = m_state->getPlayer()->intersectSideways(box))
 		{
 			m_state->getPlayer()->m_pos_x += offset;
+			if (m_state->getPlayer()->m_vx > 1.0f)
+				graphics::playSound(m_state->getFullAssetPath("metal2.wav"), 0.5f);
+
+
 			m_state->getPlayer()->m_vx = 0.0f;
 			break;
 
@@ -60,86 +58,89 @@ void Level::checkCollisions()
 	Player* player = m_state->getPlayer();
 
 	for (auto& obj : m_dynamic_objects) {
-		MiniMushroom* mushroom = dynamic_cast<MiniMushroom*>(obj);
-		if (mushroom && mushroom->isActive() && mushroom->intersect(*m_state->getPlayer())) {
-			if (m_state->getPlayer()->intersectDown(*mushroom)) {
-				mushroom->onCollision(m_state->getPlayer());
+		MiniMushroom* item = dynamic_cast<MiniMushroom*>(obj);
+		if (item && item->isActive() && item->intersect(*m_state->getPlayer())) {
+			// Handle coin collection
+			if (item->getType() == "coin") {
+				item->onCollision(m_state->getPlayer());
 			}
-			if (m_state->getPlayer()->intersectSideways(*mushroom)) {
-				m_state->getPlayer()->markForDeath(); // Mark player for death instead of direct handling
-				break;
+			// For mushrooms, we first check side collision which should result in Mario's death
+			else if (item->getType() == "mushroom") {
+				if (m_state->getPlayer()->intersectSideways(*item)) {
+					m_state->getPlayer()->markForDeath();
+					break; // Exit the loop if Mario die
+				}
+				else if (m_state->getPlayer()->intersectDown(*item)) {
+					item->onCollision(m_state->getPlayer());
+				}
 			}
 		}
 	}
 
-	for (auto& obj : m_dynamic_objects) {
-		Coin* coin = dynamic_cast<Coin*>(obj);
-		if (coin && coin->isActive() && coin->intersect(*m_state->getPlayer())) {
-			if (m_state->getPlayer()->intersect(*coin)) {
-				coin->onCollision(m_state->getPlayer());
-			}
-		}
-	}
+
+	
 }
 
 void Level::spawnCoins() {
-	Coin* coin1 = new Coin("Coin1");
-	coin1->setPosition(6.0f, 4.0f); // Example position
-	coin1->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin1 = new MiniMushroom("coin1", "coin");
+	// Set position
+	coin1->setPosition(6.0f, 4.0f);
+	// Specify the image for the coin
+	coin1->setImage("coin.png"); 
 	coin1->init();
 	m_dynamic_objects.push_back(coin1);
 
-	Coin* coin2 = new Coin("Coin2");
-	coin2->setPosition(7.0f, 4.0f); // Example position
-	coin2->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin2 = new MiniMushroom("coin2", "coin");
+	coin2->setPosition(7.0f, 4.0f); 
+	coin2->setImage("coin.png"); 
 	coin2->init();
 	m_dynamic_objects.push_back(coin2);
 
-	Coin* coin3 = new Coin("Coin3");
-	coin3->setPosition(8.0f, 4.0f); // Example position
-	coin3->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin3 = new MiniMushroom("coin3", "coin");
+	coin3->setPosition(8.0f, 4.0f);
+	coin3->setImage("coin.png"); 
 	coin3->init();
 	m_dynamic_objects.push_back(coin3);
 
-	Coin* coin4 = new Coin("Coin4");
-	coin4->setPosition(9.0f, 4.0f); // Example position
-	coin4->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin4 = new MiniMushroom("coin4", "coin");
+	coin4->setPosition(9.0f, 4.0f);
+	coin4->setImage("coin.png"); 
 	coin4->init();
 	m_dynamic_objects.push_back(coin4);
 
-	Coin* coin5 = new Coin("Coin5");
-	coin5->setPosition(19.0f, 4.0f); // Example position
-	coin5->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin5 = new MiniMushroom("coin5", "coin");
+	coin5->setPosition(19.0f, 4.0f); 
+	coin5->setImage("coin.png");
 	coin5->init();
 	m_dynamic_objects.push_back(coin5);
 
-	Coin* coin10 = new Coin("Coin10");
-	coin10->setPosition(20.0f, 3.0f); // Example position
-	coin10->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin10 = new MiniMushroom("coin10", "coin");
+	coin10->setPosition(20.0f, 3.0f);
+	coin10->setImage("coin.png"); 
 	coin10->init();
 	m_dynamic_objects.push_back(coin10);
 
-	Coin* coin6 = new Coin("Coin6");
-	coin6->setPosition(21.0f, 2.0f); // Example position
-	coin6->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin6 = new MiniMushroom("coin6", "coin");
+	coin6->setPosition(21.0f, 2.0f); 
+	coin6->setImage("coin.png"); 
 	coin6->init();
 	m_dynamic_objects.push_back(coin6);
 
-	Coin* coin7 = new Coin("Coin7");
-	coin7->setPosition(22.0f, 1.0f); // Example position
-	coin7->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin7 = new MiniMushroom("coin7", "coin");
+	coin7->setPosition(22.0f, 1.0f); 
+	coin7->setImage("coin.png"); 
 	coin7->init();
 	m_dynamic_objects.push_back(coin7);
 
-	Coin* coin8 = new Coin("Coin8");
-	coin8->setPosition(34.0f, 2.0f); // Example position
-	coin8->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin8 = new MiniMushroom("coin8", "coin");
+	coin8->setPosition(34.0f, 2.0f); 
+	coin8->setImage("coin.png"); 
 	coin8->init();
 	m_dynamic_objects.push_back(coin8);
 
-	Coin* coin9 = new Coin("Coin9");
-	coin9->setPosition(35.0f, 1.0f); // Example position
-	coin9->setImage("coin.png"); // Specify the image for the coin
+	MiniMushroom* coin9 = new MiniMushroom("coin9", "coin");
+	coin9->setPosition(35.0f, 1.0f); 
+	coin9->setImage("coin.png"); 
 	coin9->init();
 	m_dynamic_objects.push_back(coin9);
 
@@ -205,7 +206,7 @@ void Level::init()
 	m_blocks.push_back(Box(39 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(42 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	m_blocks.push_back(Box(43 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
-	m_blocks.push_back(Box(44 * m_block_size, 1 * m_block_size, m_block_size, m_block_size)); // edo tha einai i simea
+	m_blocks.push_back(Box(44 * m_block_size, 1 * m_block_size, m_block_size, m_block_size)); // edo einai i simea
 	m_blocks.push_back(Box(44 * m_block_size, 2 * m_block_size, m_block_size, m_block_size)); 
 	m_blocks.push_back(Box(45 * m_block_size, 2 * m_block_size, m_block_size, m_block_size));
 	
@@ -282,7 +283,7 @@ void Level::draw()
 	else if (m_state->isGameWon) {
 		m_brush_background.texture = m_state->getFullAssetPath("win.png");
 
-		// Draw the game over background
+		// Draw the win background
 		float offset_x = w / 2.0f;
 		float offset_y = h / 2.0f;
 		graphics::drawRect(offset_x, offset_y, w, h, m_brush_background);
@@ -296,8 +297,7 @@ void Level::draw()
 		// Draw to background				// 2.0f * w , 4.0f *w 
 		graphics::drawRect(offset_x, offset_y, 8.0f * w, 2.0f * w, m_brush_background);
 
-		// Ton player giati den einai ola ta levels idia 
-
+		
 		// Alla stoixeia piso apo ton paixti 
 		for (int i = 0; i < m_blocks.size(); i++)
 		{
@@ -314,6 +314,8 @@ void Level::draw()
 
 		for (auto p_gob : m_dynamic_objects)
 			if (p_gob) p_gob->draw();
+
+		
 
 		
 	}
@@ -338,12 +340,15 @@ Level::~Level()
 }
 
 void Level::spawnMiniMushrooms() {
-	MiniMushroom* miniMushroom = new MiniMushroom("MiniMushroom");
+	MiniMushroom* miniMushroom = new MiniMushroom("miniMushroom", "mushroom");
 
-	float tubeX = 9.0f; // X-coordinate of the tube
-	float cubeX = 4.0f;  // X-coordinate of the cube
-	float mushroomX = (tubeX + cubeX) / 2.0f; // Midpoint X-coordinate
-	float mushroomY = 5.0f; // Assuming ground level Y-coordinate
+	// Y-coordinate 
+	float tubeX = 9.0f; 
+	// X-coordinate 
+	float cubeX = 4.0f;  
+	// Midpoint coordinate
+	float mushroomX = (tubeX + cubeX) / 2.0f; 
+	float mushroomY = 5.0f; 
 
 	// Set the position of the Mini Mushroom
 	miniMushroom->setPosition(mushroomX, mushroomY);
@@ -351,48 +356,48 @@ void Level::spawnMiniMushrooms() {
 	// Set horizontal movement boundaries 
 	miniMushroom->setBoundaries(cubeX, tubeX); 
 
-	miniMushroom->setSpeed(2.0f); // Ensure this is not set to 0
-	miniMushroom->setDirection(1); // or -1, depending on the initial movement direction
+	miniMushroom->setSpeed(2.0f); 
+	miniMushroom->setDirection(1); 
 
 	miniMushroom->setImage("goomba.png");
 	miniMushroom->init();
 	m_dynamic_objects.push_back(miniMushroom);
 
 
-	MiniMushroom* sumo = new MiniMushroom("Sumo");
+	MiniMushroom* sumo = new MiniMushroom("sumo", "mushroom");
 
-	float tubesX = 31.0f; // X-coordinate of the tube
-	float cubesX = 34.0f;  // X-coordinate of the cube
-	float sumoX = (tubesX + cubesX) / 2.0f; // Midpoint X-coordinate
-	float sumoY = 3.0f; // Assuming ground level Y-coordinate
+	float tubesX = 31.0f; 
+	float cubesX = 34.0f; 
+	float sumoX = (tubesX + cubesX) / 2.0f; 
+	float sumoY = 3.0f; 
 
-	// Set the position of the Mini Mushroom
+	// Set the position of Sumo
 	sumo->setPosition(sumoX, sumoY);
 
-	// Set horizontal movement boundaries
+	
 	sumo->setBoundaries(tubesX, cubesX);
-	sumo->setSpeed(2.0f); // Ensure this is not set to 0
-	sumo->setDirection(1); // or -1, depending on the initial movement direction
+	sumo->setSpeed(2.0f); 
+	sumo->setDirection(1); 
 
 	sumo->setImage("Sumo.png");
 	sumo->init();
 	m_dynamic_objects.push_back(sumo);
 
 
-	MiniMushroom* goomba = new MiniMushroom("goomba");
+	MiniMushroom* goomba = new MiniMushroom("goomba", "mushroom");
 
-	float tubesX2 = 36.0f; // X-coordinate of the tube
-	float cubesX2 = 39.0f;  // X-coordinate of the cube
-	float sumoX2 = (tubesX2 + cubesX2) / 2.0f; // Midpoint X-coordinate
-	float sumoY2 = 1.0f; // Assuming ground level Y-coordinate
+	float tubesX2 = 36.0f; 
+	float cubesX2 = 39.0f;  
+	float sumoX2 = (tubesX2 + cubesX2) / 2.0f; 
+	float sumoY2 = 1.0f; 
 
-	// Set the position of the Mini Mushroom
+	// Set the position of goomba
 	goomba->setPosition(sumoX2, sumoY2);
 
 	// Set horizontal movement boundaries
 	goomba->setBoundaries(tubesX2, cubesX2);
-	goomba->setSpeed(2.0f); // Ensure this is not set to 0
-	goomba->setDirection(1); // or -1, depending on the initial movement direction
+	goomba->setSpeed(2.0f); 
+	goomba->setDirection(1); 
 
 	goomba->setImage("goomba2.png");
 	goomba->init();

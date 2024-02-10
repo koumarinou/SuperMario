@@ -39,19 +39,6 @@ void Player::movePlayer(float dt)
 void Player::update(float dt)
 {
 
-
-	/*const float velocity = 10.f;
-	if (graphics::getKeyState(graphics::SCANCODE_A))
-		m_pos_x -= delta_time * velocity;
-	if (graphics::getKeyState(graphics::SCANCODE_D))
-		m_pos_x += delta_time * velocity;
-	if (graphics::getKeyState(graphics::SCANCODE_W))
-		m_pos_y -= delta_time * velocity;
-	if (graphics::getKeyState(graphics::SCANCODE_S))
-		m_pos_y += delta_time * velocity;*/
-
-
-
 	movePlayer(dt);
 
 	m_state->m_global_offset_x = m_state->getCanvasWidth() / 2.0f - m_pos_x;
@@ -67,9 +54,6 @@ void Player::init()
 
 	// Gia * sta cubes (oria)
 	m_width /= 2.0f;
-	//m_height /= 2.0f;
-
-
 
 	m_state->m_global_offset_x = m_state->getCanvasWidth() / 2.0f - m_pos_x;
 	m_state->m_global_offset_y = m_state->getCanvasHeight() / 2.0f - m_pos_y;
@@ -86,10 +70,12 @@ void Player::draw()
 }
 
 void Player::setDirectionImage() {
-	if (m_vx < 0) { // Moving left
+	// Moving left
+	if (m_vx < 0) {
 		m_brush_player.texture = m_state->getFullAssetPath("Mini_Mario2.png");
 	}
-	else if (m_vx > 0) { // Moving right
+	// Moving right
+	else if (m_vx > 0) { 
 		m_brush_player.texture = m_state->getFullAssetPath("Mini_Mario.png");
 	}
 	// If m_vx == 0, looking straight
